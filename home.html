@@ -1,146 +1,114 @@
-import { BrowserRouter as Router, Routes, Route, Link, useParams } from "react-router-dom";
-import { useState } from "react";
-import { Heart, ShoppingCart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>競界有限公司</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
 
-const categories = [
-  {
-    id: "tops",
-    name: "上衣",
-    products: [
-      {
-        id: 1,
-        name: "夏日簡約T恤",
-        price: 499,
-        image: "https://via.placeholder.com/300x400.png?text=T-Shirt",
-      },
-    ],
-  },
-  {
-    id: "pants",
-    name: "褲子",
-    products: [
-      {
-        id: 2,
-        name: "高腰牛仔褲",
-        price: 899,
-        image: "https://via.placeholder.com/300x400.png?text=Jeans",
-      },
-    ],
-  },
-  {
-    id: "jackets",
-    name: "外套",
-    products: [
-      {
-        id: 3,
-        name: "輕薄針織外套",
-        price: 799,
-        image: "https://via.placeholder.com/300x400.png?text=Cardigan",
-      },
-    ],
-  },
-];
+  <!-- 導覽列 -->
+  <header class="bg-white shadow-md p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">拍賣衣櫥</h1>
+    <nav>
+      <ul class="flex space-x-4">
+        <li><a href="#women" class="hover:text-blue-500">女服飾</a></li>
+        <li><a href="#furniture" class="hover:text-blue-500">家具裝飾</a></li>
+        <li><a href="#daily" class="hover:text-blue-500">日用品</a></li>
+        <li><button onclick="viewCart()" class="bg-blue-500 text-white px-3 py-1 rounded">購物車 (<span id="cart-count">0</span>)</button></li>
+      </ul>
+    </nav>
+  </header>
 
-function ProductCard({ product, onAddToCart, onToggleFavorite, isFavorited }) {
-  return (
-    <Card className="relative group">
-      <img
-        src={product.image}
-        alt={product.name}
-        className="w-full h-80 object-cover rounded-t-2xl"
-      />
-      <CardContent className="p-4">
-        <div className="flex justify-between items-center mb-2">
-          <h2 className="text-lg font-semibold">{product.name}</h2>
-          <button onClick={() => onToggleFavorite(product.id)}>
-            <Heart
-              className={`w-5 h-5 ${
-                isFavorited ? "text-red-500 fill-red-500" : "text-gray-400"
-              }`}
-            />
-          </button>
+  <!-- 商品展示區 -->
+  <main class="p-4">
+    <!-- 女服飾 -->
+    <section id="women" class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">👗 女服飾</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-4 rounded shadow">
+          <img src="https://via.placeholder.com/200x200?text=洋裝" alt="洋裝" class="w-full h-48 object-cover mb-2">
+          <h3 class="text-lg font-medium">夏日洋裝</h3>
+          <p class="text-red-500">$599</p>
+          <button onclick="addToCart('夏日洋裝', 599)" class="mt-2 bg-green-500 text-white px-3 py-1 rounded">加入購物車</button>
         </div>
-        <p className="text-gray-700 mb-2">NT$ {product.price}</p>
-        <Button className="w-full" onClick={() => onAddToCart(product)}>
-          加入購物車
-        </Button>
-      </CardContent>
-    </Card>
-  );
-}
-
-function HomePage() {
-  return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-center mb-8">商品分類</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {categories.map((cat) => (
-          <Link
-            key={cat.id}
-            to={`/category/${cat.id}`}
-            className="block p-6 border rounded-xl shadow hover:shadow-md transition"
-          >
-            <h2 className="text-xl font-semibold text-center">{cat.name}</h2>
-          </Link>
-        ))}
+        <!-- 可複製多個商品 -->
       </div>
-    </div>
-  );
-}
+    </section>
 
-function CategoryPage({ cart, setCart, favorites, setFavorites }) {
-  const { id } = useParams();
-  const category = categories.find((cat) => cat.id === id);
-
-  if (!category) return <p className="p-6 text-center">分類未找到</p>;
-
-  const addToCart = (product) => setCart((prev) => [...prev, product]);
-  const toggleFavorite = (id) => {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((fid) => fid !== id) : [...prev, id]
-    );
-  };
-
-  return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">{category.name}</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {category.products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onAddToCart={addToCart}
-            onToggleFavorite={toggleFavorite}
-            isFavorited={favorites.includes(product.id)}
-          />
-        ))}
+    <!-- 家具裝飾 -->
+    <section id="furniture" class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">🛋️ 家具裝飾</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-4 rounded shadow">
+          <img src="https://via.placeholder.com/200x200?text=抱枕" alt="抱枕" class="w-full h-48 object-cover mb-2">
+          <h3 class="text-lg font-medium">印花抱枕</h3>
+          <p class="text-red-500">$299</p>
+          <button onclick="addToCart('印花抱枕', 299)" class="mt-2 bg-green-500 text-white px-3 py-1 rounded">加入購物車</button>
+        </div>
       </div>
+    </section>
+
+    <!-- 日用品 -->
+    <section id="daily">
+      <h2 class="text-2xl font-semibold mb-4">🧴 日用品</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-4 rounded shadow">
+          <img src="https://via.placeholder.com/200x200?text=洗手乳" alt="洗手乳" class="w-full h-48 object-cover mb-2">
+          <h3 class="text-lg font-medium">草本洗手乳</h3>
+          <p class="text-red-500">$149</p>
+          <button onclick="addToCart('草本洗手乳', 149)" class="mt-2 bg-green-500 text-white px-3 py-1 rounded">加入購物車</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 購物車視窗 -->
+  <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+    <div class="bg-white p-6 rounded shadow-lg w-96">
+      <h3 class="text-xl font-bold mb-4">🛒 購物車內容</h3>
+      <ul id="cart-list" class="mb-4"></ul>
+      <p id="cart-total" class="font-semibold">總計：$0</p>
+      <button onclick="closeCart()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">關閉</button>
     </div>
-  );
-}
+  </div>
 
-export default function App() {
-  const [cart, setCart] = useState([]);
-  const [favorites, setFavorites] = useState([]);
+  <!-- JS 購物車邏輯 -->
+  <script>
+    const cart = [];
 
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route
-          path="/category/:id"
-          element={
-            <CategoryPage
-              cart={cart}
-              setCart={setCart}
-              favorites={favorites}
-              setFavorites={setFavorites}
-            />
-          }
-        />
-      </Routes>
-    </Router>
-  );
-}
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      document.getElementById("cart-count").innerText = cart.length;
+    }
+
+    function viewCart() {
+      const list = document.getElementById("cart-list");
+      const total = document.getElementById("cart-total");
+      list.innerHTML = "";
+      let sum = 0;
+
+      cart.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} - $${item.price}`;
+        list.appendChild(li);
+        sum += item.price;
+      });
+
+      total.textContent = `總計：$${sum}`;
+      document.getElementById("cart-modal").classList.remove("hidden");
+    }
+
+    function closeCart() {
+      document.getElementById("cart-modal").classList.add("hidden");
+    }
+  </script>
+   <footer>
+    &copy; 2025 競界有限公司 
+     <div>
+          <p>統編：60773118</p>
+        </div>
+  </footer>
+</body>
+</html>
