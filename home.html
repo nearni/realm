@@ -1,0 +1,146 @@
+import { BrowserRouter as Router, Routes, Route, Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { Heart, ShoppingCart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
+const categories = [
+  {
+    id: "tops",
+    name: "上衣",
+    products: [
+      {
+        id: 1,
+        name: "夏日簡約T恤",
+        price: 499,
+        image: "https://via.placeholder.com/300x400.png?text=T-Shirt",
+      },
+    ],
+  },
+  {
+    id: "pants",
+    name: "褲子",
+    products: [
+      {
+        id: 2,
+        name: "高腰牛仔褲",
+        price: 899,
+        image: "https://via.placeholder.com/300x400.png?text=Jeans",
+      },
+    ],
+  },
+  {
+    id: "jackets",
+    name: "外套",
+    products: [
+      {
+        id: 3,
+        name: "輕薄針織外套",
+        price: 799,
+        image: "https://via.placeholder.com/300x400.png?text=Cardigan",
+      },
+    ],
+  },
+];
+
+function ProductCard({ product, onAddToCart, onToggleFavorite, isFavorited }) {
+  return (
+    <Card className="relative group">
+      <img
+        src={product.image}
+        alt={product.name}
+        className="w-full h-80 object-cover rounded-t-2xl"
+      />
+      <CardContent className="p-4">
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-lg font-semibold">{product.name}</h2>
+          <button onClick={() => onToggleFavorite(product.id)}>
+            <Heart
+              className={`w-5 h-5 ${
+                isFavorited ? "text-red-500 fill-red-500" : "text-gray-400"
+              }`}
+            />
+          </button>
+        </div>
+        <p className="text-gray-700 mb-2">NT$ {product.price}</p>
+        <Button className="w-full" onClick={() => onAddToCart(product)}>
+          加入購物車
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+function HomePage() {
+  return (
+    <div className="p-6 max-w-5xl mx-auto">
+      <h1 className="text-3xl font-bold text-center mb-8">商品分類</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {categories.map((cat) => (
+          <Link
+            key={cat.id}
+            to={`/category/${cat.id}`}
+            className="block p-6 border rounded-xl shadow hover:shadow-md transition"
+          >
+            <h2 className="text-xl font-semibold text-center">{cat.name}</h2>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CategoryPage({ cart, setCart, favorites, setFavorites }) {
+  const { id } = useParams();
+  const category = categories.find((cat) => cat.id === id);
+
+  if (!category) return <p className="p-6 text-center">分類未找到</p>;
+
+  const addToCart = (product) => setCart((prev) => [...prev, product]);
+  const toggleFavorite = (id) => {
+    setFavorites((prev) =>
+      prev.includes(id) ? prev.filter((fid) => fid !== id) : [...prev, id]
+    );
+  };
+
+  return (
+    <div className="p-6 max-w-6xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4">{category.name}</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {category.products.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            onAddToCart={addToCart}
+            onToggleFavorite={toggleFavorite}
+            isFavorited={favorites.includes(product.id)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  const [cart, setCart] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/category/:id"
+          element={
+            <CategoryPage
+              cart={cart}
+              setCart={setCart}
+              favorites={favorites}
+              setFavorites={setFavorites}
+            />
+          }
+        />
+      </Routes>
+    </Router>
+  );
+}
