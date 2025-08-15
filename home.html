@@ -261,19 +261,20 @@
       total.textContent = `總計：$${sum}`;
   // 加入結帳按鈕
   const checkoutBtn = document.createElement("button");
+      checkoutBtn.className = "btn mt-4"; 
   checkoutBtn.textContent = "結帳";
-  checkoutBtn.style.marginTop = "10px";
-  checkoutBtn.style.padding = "8px 16px";
-  checkoutBtn.style.background = "#28a745";
-  checkoutBtn.style.color = "#fff";
-  checkoutBtn.style.border = "none";
-  checkoutBtn.style.cursor = "pointer";
+  //checkoutBtn.style.marginTop = "10px";
+  //checkoutBtn.style.padding = "8px 16px";
+  //checkoutBtn.style.background = "#28a745";
+ // checkoutBtn.style.color = "#fff";
+  //checkoutBtn.style.border = "none";
+  //checkoutBtn.style.cursor = "pointer";
   checkoutBtn.onclick = () => {
     // 改成 window.location.href = 'checkout.html';
     alert("前往結帳頁面");
   };
-  //list.appendChild(checkoutBtn);
-  header.appendChild(checkoutBtn);
+  list.appendChild(checkoutBtn);
+  //header.appendChild(checkoutBtn);
       
       document.getElementById("cart-modal").classList.add("active");
     }
