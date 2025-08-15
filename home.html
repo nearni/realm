@@ -246,6 +246,8 @@
     function viewCart() {
       const list = document.getElementById("cart-list");
       const total = document.getElementById("cart-total");
+       const header = document.getElementById("cart-header");
+
       list.innerHTML = "";
       let sum = 0;
 
@@ -267,11 +269,11 @@
   checkoutBtn.style.border = "none";
   checkoutBtn.style.cursor = "pointer";
   checkoutBtn.onclick = () => {
-    // 可以改成 window.location.href = 'checkout.html';
+    // 改成 window.location.href = 'checkout.html';
     alert("前往結帳頁面");
   };
-  list.appendChild(checkoutBtn);
-
+  //list.appendChild(checkoutBtn);
+  header.appendChild(checkoutBtn);
       
       document.getElementById("cart-modal").classList.add("active");
     }
